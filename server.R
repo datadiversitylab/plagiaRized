@@ -32,7 +32,7 @@ server <- function(input, output, session) {
     diffr::diffr(compOr[x,1], compOr[x,2],
     before = comp2[x,1], after = comp2[x,1]
       )
-    )
+    
   })
 
 
