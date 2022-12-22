@@ -17,11 +17,7 @@ ui <- fluidPage(
            actionButton("run", "Run analyses")
       ),
         conditionalPanel(condition = "input.tabselected == 'panel2'", 
-                                   selectInput("compare", 
-                                   "Choose files", 
-                                   multiple = T, 
-                                   choices = 'No choices here yet',
-       options = list(maxItems = 2))
+                                   h3("Visually compare the files")
                         )
     ),
     mainPanel(
@@ -33,7 +29,7 @@ ui <- fluidPage(
       DT::dataTableOutput("comparison")
       ),
       tabPanel("Visual", id = "panel2", value = "panel2",
-      fluidPage(htmlOutput('diffobj_element'))
+      fluidPage(diffrOutput("diffobj_element"))
       )
     )
     )

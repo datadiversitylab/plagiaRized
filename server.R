@@ -8,7 +8,7 @@ server <- function(input, output, session) {
     observeEvent(input$run, {
 
     files <- input$upload$datapath
-    comp <- expand.grid.unique(x= files, y =files)
+    comp <- compOr <- expand.grid.unique(x= files, y =files)
     comp2 <- expand.grid.unique(x = input$upload$name, y = input$upload$name)
 
     differences <- sapply(1:nrow(comp), function(x){
@@ -23,18 +23,18 @@ server <- function(input, output, session) {
        )
 
     comp <- cbind.data.frame(comp2, differences)
-    output$comparison <- DT::renderDataTable({comp})
+    output$comparison <- DT::renderDataTable(comp,
+                      selection = 'single')
 
-    output$diffobj_element <- renderUI({
-      HTML(
-        as.character(
-          diffPrint(
-            1:5, 2:6,
-            format = "html",
-            style = list(html.output="diff.w.style")
-              )
-            )
-          )
-        })
+  output$diffobj_element <- renderDiffr({
+    x = input$comparison_rows_selected
+    x <- if(is.null(x)){1}else{x}
+    diffr::diffr(compOr[x,1], compOr[x,2],
+    before = comp2[x,1], after = comp2[x,1]
+      )
+    )
+  })
+
+
   })
 }
