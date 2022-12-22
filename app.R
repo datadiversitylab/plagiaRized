@@ -8,6 +8,7 @@ library(shiny)
 library(shinydashboard)
 library(diffr)
 library(diffobj)
+library(DT)
 
 source('ui.R')
 source('server.R')
