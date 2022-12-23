@@ -23,6 +23,9 @@ server <- function(input, output, session) {
        )
 
     comp <- cbind.data.frame(comp2, differences)
+    comp <- comp[order(differences, decreasing = FALSE),] 
+    colnames(comp) <- c("Submission 1", "Submission 2", "Differences (lines)")
+
     output$comparison <- DT::renderDataTable(comp,
                       selection = 'single')
 
