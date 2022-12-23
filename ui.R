@@ -52,7 +52,7 @@ ui <- fluidPage(
       DT::dataTableOutput("comparison")
       ),
       tabPanel("Visual", id = "panel2", value = "panel2",
-      fluidPage(diffrOutput("diffobj_element"))
+      fluidPage(diffr::diffrOutput("diffobj_element"))
       )
     )
     )

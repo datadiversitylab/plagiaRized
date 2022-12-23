@@ -3,6 +3,17 @@
 # 
 # For all your server needs 
 ###################
+expand.grid.unique <<- function(x, y, include.equals=FALSE){
+  x <- unique(x)
+  y <- unique(y)
+  g <- function(i)
+  {
+    z <- setdiff(y, x[seq_len(i-include.equals)])
+    if(length(z)) cbind(x[i], z, deparse.level=0)
+  }
+  do.call(rbind, lapply(seq_along(x), g))
+}
+
 server <- function(input, output, session) {
     #Submit files
     observeEvent(input$run, {
@@ -12,7 +23,7 @@ server <- function(input, output, session) {
     comp2 <- expand.grid.unique(x = input$upload$name, y = input$upload$name)
 
     differences <- sapply(1:nrow(comp), function(x){
-    length(ses(readLines(comp[x,1]), readLines(comp[x,2])))
+    length(diffobj::ses(readLines(comp[x,1]), readLines(comp[x,2])))
     })
 
     updateSelectizeInput(session, 
@@ -29,7 +40,7 @@ server <- function(input, output, session) {
     output$comparison <- DT::renderDataTable(comp,
                       selection = 'single')
 
-  output$diffobj_element <- renderDiffr({
+  output$diffobj_element <- diffr::renderDiffr({
     x = input$comparison_rows_selected
     x <- if(is.null(x)){1}else{x}
     diffr::diffr(compOr[x,1], compOr[x,2],
@@ -37,7 +48,5 @@ server <- function(input, output, session) {
       )
     
   })
-
-
   })
 }
